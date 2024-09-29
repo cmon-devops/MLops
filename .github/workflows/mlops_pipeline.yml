@@ -22,7 +22,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          registry-type: private  # No region here
+          registry-type: private
+          region: ${{ vars.AWS_REGION }}  # Add this line to specify the region
 
       - name: Build, tag, and push Docker image
         env:
@@ -30,7 +31,6 @@ jobs:
           AWS_REGION: ${{ vars.AWS_REGION }}  # Use the repository variable
         run: |
           IMAGE_TAG=latest
-          echo "AWS_REGION=${AWS_REGION}" >> $GITHUB_ENV
           docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG} -f docker/Dockerfile .
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG}
 
