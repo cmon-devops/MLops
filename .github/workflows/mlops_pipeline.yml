@@ -23,12 +23,12 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         with:
           registry-type: private
-          region: ${{ vars.AWS_REGION }}  # Add this line to specify the region
+          # Remove the region line here
 
       - name: Build, tag, and push Docker image
         env:
           ECR_REPOSITORY: ml-api
-          AWS_REGION: ${{ vars.AWS_REGION }}  # Use the repository variable
+          AWS_REGION: us-east-2  # Directly set the region here or pull from secrets/variables
         run: |
           IMAGE_TAG=latest
           docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG} -f docker/Dockerfile .
@@ -46,7 +46,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}  # Use the repository variable
+          aws-region: us-east-2  # Set the region again here
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
@@ -55,7 +55,7 @@ jobs:
 
       - name: Update kubeconfig for AWS EKS
         run: |
-          aws eks update-kubeconfig --name kubeflow --region ${{ vars.AWS_REGION }}  # Use the repository variable
+          aws eks update-kubeconfig --name kubeflow --region us-east-2  # Set the region again
 
       - name: Deploy to Kubernetes
         run: |
