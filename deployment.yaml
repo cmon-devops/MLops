@@ -1,1 +1,19 @@
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-api-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ml-api
+  template:
+    metadata:
+      labels:
+        app: ml-api
+    spec:
+      containers:
+      - name: ml-api
+        image: 529088267622.dkr.ecr.us-east-2.amazonaws.com/ml-api
+        ports:
+        - containerPort: 5000
