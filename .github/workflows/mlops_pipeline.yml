@@ -53,7 +53,7 @@ jobs:
 
       - name: Update kubeconfig for AWS EKS
         run: |
-          aws eks update-kubeconfig --name your-cluster-name --region us-east-2  # Replace with your actual cluster name
+          aws eks update-kubeconfig --name kubeflow --region us-east-2  # Replace with your actual cluster name
 
       - name: Deploy to Kubernetes
         run: |
